@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'docker' } 
+    
     parameters{
         string(name: 'CONTAINER_NAME', defaultValue: 'anura', description: "container name")
         //choice(name: 'NAME', choices['3','2','1'], description: "container name")
@@ -9,6 +9,7 @@ pipeline {
     environment{
        PORT="3001"
     }
+    agent { label 'docker' } 
     stages{
         stage("Build"){
             steps{
