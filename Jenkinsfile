@@ -14,7 +14,7 @@ pipeline {
         stage("Build"){
             steps{
                 echo "Create the Docker Image"
-                sh "docker build -t ${CONTAINER_NAME}-redis:1.0 ."
+                sh "docker build -t ${params.CONTAINER_NAME}-redis:1.0 ."
             }
         }
         stage("Clean Up"){
@@ -29,7 +29,7 @@ pipeline {
         }
         stage("Deploy"){
             steps{
-                sh "docker run --name ${CONTAINER_NAME} -p ${PORT}:6379 -d --restart unless-stopped ${CONTAINER_NAME}-redis:1.0"
+                sh "docker run --name ${params.CONTAINER_NAME} -p ${PORT}:6379 -d --restart unless-stopped ${params.CONTAINER_NAME}-redis:1.0"
             }
         }
         stage("Test"){
