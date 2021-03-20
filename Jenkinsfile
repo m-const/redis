@@ -24,7 +24,7 @@ pipeline {
                 }
             }
             steps{
-               sh "docker rm -f \$(docker ps -f 'publish=${PORT}') || echo 'No Running Containers on PORT: ${PORT} to remove'"
+               sh "docker rm -f \$(docker ps -fq 'publish=${PORT}') || echo 'No Running Containers on PORT: ${PORT} to remove'"
             }
         }
         stage("Deploy"){
