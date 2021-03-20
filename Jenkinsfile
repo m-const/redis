@@ -24,13 +24,13 @@ pipeline {
                 }
             }
             steps{
-                sh "docker rm -f \$(docker ps -fq 'publish=${PORT}') || echo 'No Running Containers on PORT: ${PORT} to remove'"
+                sh "docker rm -f \$(docker ps -q -f 'publish=${PORT}') || echo 'No Running Containers on PORT: ${PORT} to remove'"
             }
         }
         stage("Deploy"){
             steps{
                 sh "docker run --name ${params.CONTAINER_NAME} -p ${PORT}:6379 -d --restart unless-stopped ${params.CONTAINER_NAME}-redis:1.0"
-                sh "docker ps -fq 'status=running' -fq 'publish=${PORT}'"
+                sh "docker ps -q -f 'status=running' -f 'publish=${PORT}'"
             }
         }
         stage("Test"){
