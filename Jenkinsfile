@@ -20,7 +20,7 @@ pipeline {
        REDIS_INIT_PASS="temppass"
        AGENT_IP="192.168.0.126"
 
-        DOCKER_IMAGE_VERSION="1.1"
+        DOCKER_IMAGE_VERSION="1.2"
     }
     agent { label 'docker' } 
     stages{
