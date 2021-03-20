@@ -48,6 +48,8 @@ pipeline {
                 sh "docker exec -d ${params.CONTAINER_NAME} sed -i 's/BUILDUSER/${params.REDIS_USER}/g' /etc/redis/users.acl"
                 sh "docker exec -d ${params.CONTAINER_NAME} sed -i 's/nocommands/${params.REDIS_PERMISSIONS}/g' /etc/redis/users.acl"
                 sh "docker exec -d ${params.CONTAINER_NAME} sed -i 's/BUILDPWD/${params.REDIS_PASS}/g' /etc/redis/users.acl"
+
+               sh "docker restart ${params.CONTAINER_NAME}"
             }
         }
 
