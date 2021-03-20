@@ -5,6 +5,14 @@ pipeline {
         //choice(name: 'NAME', choices['3','2','1'], description: "container name")
         booleanParam(name: 'RUNTESTS', defaultValue: false, description: "Run Test Section?")
         booleanParam(name: 'CLEAR_DOCKER', defaultValue: false, description: "Force delete other containers running on this port?")
+
+        //set a PW for redis default user
+        string(name: 'REDIS_DEFAULT_USER_PASS', defaultValue: '', description: "REDIS default user password")
+
+        //Set a non-default user (for application)
+        string(name: 'REDIS_USER', defaultValue: '', description: "REDIS USER")
+        string(name: 'REDIS_PASS', defaultValue: '', description: "REDIS PASS")
+        string(name: 'REDIS_PERMISSIONS', defaultValue: '~* &* +@all', description: "Redis ACL permissions to apply to app user.")
     }
     environment{
        PORT="3001"
@@ -31,6 +39,11 @@ pipeline {
             steps{
                 sh "docker run --name ${params.CONTAINER_NAME} -p ${PORT}:6379 -d --restart unless-stopped ${params.CONTAINER_NAME}-redis:1.0"
                 sh "docker ps -q -f 'status=running' -f 'publish=${PORT}'"
+
+                //initial config
+                sh "redis-cli ACL SETUSER default >${params.REDIS_DEFAULT_USER_PASS}"
+                sh "redis-cli ACL SETUSER ${params.REDIS_USER} on >${params.REDIS_PASS} ${params.REDIS_PERMISSIONS}"
+
             }
         }
         stage("Test"){
