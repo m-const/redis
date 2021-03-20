@@ -25,7 +25,7 @@ pipeline {
         stage("Build"){
             steps{
                 echo "Create the Docker Image"
-                sh "docker build -t ${params.CONTAINER_NAME}-redis:1.0 ."
+                sh "docker build -t ${params.CONTAINER_NAME}-redis:1.1 ."
             }
         }
         stage("Clean Up"){
