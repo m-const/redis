@@ -1,9 +1,9 @@
 pipeline {
     
     parameters{
-        string(name: 'CONTAINER_NAME', defaultValue: 'anura', description: "container name")
+        string(name: 'CONTAINER_NAME', defaultValue: 'anura', description: "Docker Container Name")
         //choice(name: 'NAME', choices['3','2','1'], description: "container name")
-        booleanParam(name: 'RUNTESTS', defaultValue: false, description: "container name")
+        booleanParam(name: 'RUNTESTS', defaultValue: false, description: "Run Test Section?")
         booleanParam(name: 'CLEAR_DOCKER', defaultValue: false, description: "Force delete other containers running on this port?")
     }
     environment{
@@ -49,6 +49,6 @@ pipeline {
             echo "Build number: ${BUILD_NUMBER}"
         }
         success{echo "Success!"}
-        failure{echo "failure!"}
+        failure{echo "Failure!"}
     }
 }
