@@ -43,8 +43,8 @@ pipeline {
                 sh "docker ps -q -f 'status=running' -f 'publish=${PORT}'"
 
                 //initial config the 
-                sh "redis-cli ACL SETUSER default >${params.REDIS_DEFAULT_USER_PASS} <${REDIS_INIT_PASS}"
-                sh "redis-cli ACL SETUSER ${params.REDIS_USER} on >${params.REDIS_PASS} ${params.REDIS_PERMISSIONS}"
+                sh "redis-cli AUTH ${REDIS_INIT_PASS} ACL SETUSER default >${params.REDIS_DEFAULT_USER_PASS} <${REDIS_INIT_PASS}"
+                sh "redis-cli AUTH ${params.REDIS_DEFAULT_USER_PASS} ACL SETUSER ${params.REDIS_USER} on >${params.REDIS_PASS} ${params.REDIS_PERMISSIONS}"
 
             }
         }
