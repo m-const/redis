@@ -44,13 +44,8 @@ pipeline {
                 sh "docker ps -q -f 'status=running' -f 'publish=${PORT}'"
                 
 
-                sh '''#!/bin/bash
-                 redis-cli -h ${AGENT_IP} -p ${PORT} AUTH ${REDIS_INIT_PASS} ACL SETUSER default >${params.REDIS_DEFAULT_USER_PASS} <${REDIS_INIT_PASS}
-                 redis-cli -h ${AGENT_IP} -p ${PORT} AUTH ${params.REDIS_DEFAULT_USER_PASS} ACL SETUSER ${params.REDIS_USER} on >${params.REDIS_PASS} ${params.REDIS_PERMISSIONS}
-                    '''
-
-                
-
+                sh "redis-cli -h ${AGENT_IP} -p ${PORT} AUTH ${REDIS_INIT_PASS} ACL SETUSER default nopass >${params.REDIS_DEFAULT_USER_PASS}"
+                sh "redis-cli -h ${AGENT_IP} -p ${PORT} AUTH ${params.REDIS_DEFAULT_USER_PASS} ACL SETUSER ${params.REDIS_USER} on >${params.REDIS_PASS} ${params.REDIS_PERMISSIONS}"
             }
         }
         stage("Test"){
