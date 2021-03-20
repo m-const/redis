@@ -18,6 +18,7 @@ pipeline {
        PORT="3001"
        //this should be the same temp password in the redis.conf file "requirepass"
        REDIS_INIT_PASS="temppass"
+       AGENT_IP="192.168.0.126"
     }
     agent { label 'docker' } 
     stages{
@@ -40,13 +41,10 @@ pipeline {
         stage("Deploy"){
             steps{
                 sh "docker run --name ${params.CONTAINER_NAME} -p ${PORT}:6379 -d --restart unless-stopped ${params.CONTAINER_NAME}-redis:1.0"
-                }steps{
                 sh "docker ps -q -f 'status=running' -f 'publish=${PORT}'"
-}steps{
                 //initial config the 
-                sh "redis-cli AUTH ${REDIS_INIT_PASS} ACL SETUSER default >${params.REDIS_DEFAULT_USER_PASS} <${REDIS_INIT_PASS}"
-}steps{
-                sh "redis-cli AUTH ${params.REDIS_DEFAULT_USER_PASS} ACL SETUSER ${params.REDIS_USER} on >${params.REDIS_PASS} ${params.REDIS_PERMISSIONS}"
+                sh "redis-cli -h ${AGENT_IP} -p ${PORT}  AUTH ${REDIS_INIT_PASS} ACL SETUSER default >${params.REDIS_DEFAULT_USER_PASS} <${REDIS_INIT_PASS}"
+                sh "redis-cli -h ${AGENT_IP} -p ${PORT}  AUTH ${params.REDIS_DEFAULT_USER_PASS} ACL SETUSER ${params.REDIS_USER} on >${params.REDIS_PASS} ${params.REDIS_PERMISSIONS}"
 
             }
         }
