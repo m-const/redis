@@ -19,13 +19,15 @@ pipeline {
        //this should be the same temp password in the redis.conf file "requirepass"
        REDIS_INIT_PASS="temppass"
        AGENT_IP="192.168.0.126"
+
+        DOCKER_IMAGE_VERSION="1.1"
     }
     agent { label 'docker' } 
     stages{
         stage("Build"){
             steps{
                 echo "Create the Docker Image"
-                sh "docker build -t ${params.CONTAINER_NAME}-redis:1.1 ."
+                sh "docker build -t ${params.CONTAINER_NAME}-redis:${DOCKER_IMAGE_VERSION} ."
             }
         }
         stage("Clean Up"){
@@ -40,7 +42,7 @@ pipeline {
         }
         stage("Deploy"){
             steps{
-                sh "docker run --name ${params.CONTAINER_NAME} -p ${PORT}:6379 -d --restart unless-stopped ${params.CONTAINER_NAME}-redis:1.0"
+                sh "docker run --name ${params.CONTAINER_NAME} -p ${PORT}:6379 -d --restart unless-stopped ${params.CONTAINER_NAME}-redis:${DOCKER_IMAGE_VERSION}"
                 sh "docker ps -q -f 'status=running' -f 'publish=${PORT}'"
                 //JENKINSREPACE is set as the password in redis.conf
                 sh "docker exec -d ${params.CONTAINER_NAME} sed -i 's/JENKINSREPACE/${params.REDIS_DEFAULT_USER_PASS}/g' /usr/local/etc/redis/redis.conf"
