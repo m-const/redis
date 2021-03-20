@@ -12,7 +12,7 @@ pipeline {
         //Set a non-default user (for application)
         string(name: 'REDIS_USER', defaultValue: 'app', description: "REDIS USER")
         string(name: 'REDIS_PASS', defaultValue: 'pass', description: "REDIS PASS")
-        string(name: 'REDIS_PERMISSIONS', defaultValue: '~* &* +@all', description: "Redis ACL permissions to apply to app user.")
+        string(name: 'REDIS_PERMISSIONS', defaultValue: 'allkeys allchannels allcommands', description: "Redis ACL permissions to apply to app user.")
     }
     environment{
        PORT="3001"
