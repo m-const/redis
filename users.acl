@@ -1,2 +1,1 @@
-user admin off &* -@all
-#user BUILDUSER PARMS on >BUILDPWD
+user BUILDUSER on nocommands >BUILDPWD

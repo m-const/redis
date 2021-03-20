@@ -46,7 +46,7 @@ pipeline {
                 sh "docker ps -q -f 'status=running' -f 'publish=${PORT}'"
                 
                 sh "docker exec -d ${params.CONTAINER_NAME} sed -i 's/BUILDUSER/${params.REDIS_USER}/g' /usr/local/etc/redis/users.acl"
-                sh "docker exec -d ${params.CONTAINER_NAME} sed -i 's/PARMS/${params.REDIS_PERMISSIONS}/g' /usr/local/etc/redis/users.acl"
+                sh "docker exec -d ${params.CONTAINER_NAME} sed -i 's/nocommands/${params.REDIS_PERMISSIONS}/g' /usr/local/etc/redis/users.acl"
                 sh "docker exec -d ${params.CONTAINER_NAME} sed -i 's/BUILDPWD/${params.REDIS_PASS}/g' /usr/local/etc/redis/users.acl"
                 sh "docker exec -d ${params.CONTAINER_NAME} /etc/init.d/redis-server restart"
             }
