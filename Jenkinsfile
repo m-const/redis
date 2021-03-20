@@ -43,7 +43,7 @@ pipeline {
                 sh "docker run --name ${params.CONTAINER_NAME} -p ${PORT}:6379 -d --restart unless-stopped ${params.CONTAINER_NAME}-redis:1.0"
                 sh "docker ps -q -f 'status=running' -f 'publish=${PORT}'"
                 //JENKINSREPACE is set as the password in redis.conf
-                sh "sed -i 's/JENKINSREPACE/${params.REDIS_DEFAULT_USER_PASS}/g' redis.conf"
+                sh "sed -i 's/JENKINSREPACE/${params.REDIS_DEFAULT_USER_PASS}/g' /usr/local/etc/redis/redis.conf"
                 sh "docker exec -d ${params.CONTAINER_NAME} /etc/init.d/redis-server restart"
             }
         }
