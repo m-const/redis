@@ -7,7 +7,7 @@ pipeline {
         booleanParam(name: 'CLEAR_DOCKER', defaultValue: true, description: "Force delete other containers running on this port?")
 
         //set a PW for redis default user
-        string(name: 'REDIS_DEFAULT_USER_PASS', defaultValue: '', description: "REDIS default user password")
+        //string(name: 'REDIS_DEFAULT_USER_PASS', defaultValue: '', description: "REDIS default user password")
 
         //Set a non-default user (for application)
         string(name: 'REDIS_USER', defaultValue: 'app', description: "REDIS USER")
@@ -44,8 +44,10 @@ pipeline {
             steps{
                 sh "docker run --name ${params.CONTAINER_NAME} -p ${PORT}:6379 -d --restart unless-stopped ${params.CONTAINER_NAME}-redis:${DOCKER_IMAGE_VERSION}"
                 sh "docker ps -q -f 'status=running' -f 'publish=${PORT}'"
-                //JENKINSREPACE is set as the password in redis.conf
-                sh "docker exec -d ${params.CONTAINER_NAME} sed -i 's/JENKINSREPACE/${params.REDIS_DEFAULT_USER_PASS}/g' /usr/local/etc/redis/redis.conf"
+                
+                sh "docker exec -d ${params.CONTAINER_NAME} sed -i 's/BUILDUSER/${params.REDIS_USER}/g' /usr/local/etc/redis/users.acl"
+                sh "docker exec -d ${params.CONTAINER_NAME} sed -i 's/PARMS/${params.REDIS_PERMISSIONS}/g' /usr/local/etc/redis/users.acl"
+                sh "docker exec -d ${params.CONTAINER_NAME} sed -i 's/BUILDPWD/${params.REDIS_PASS}/g' /usr/local/etc/redis/users.acl"
                 sh "docker exec -d ${params.CONTAINER_NAME} /etc/init.d/redis-server restart"
             }
         }
