@@ -1,1 +1,2 @@
 user BUILDUSER on nocommands >BUILDPWD
+user default off nopass
