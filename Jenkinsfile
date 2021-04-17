@@ -11,12 +11,13 @@ pipeline {
         //string(name: 'REDIS_DEFAULT_USER_PASS', defaultValue: '', description: "REDIS default user password")
 
         //Set a non-default user (for application)
+        //TODO: change this to use a jenkins credential
         string(name: 'REDIS_USER', defaultValue: 'app', description: "REDIS USER")
         string(name: 'REDIS_PASS', defaultValue: 'pass', description: "REDIS PASS")
         string(name: 'REDIS_PERMISSIONS', defaultValue: 'allkeys allchannels allcommands', description: "Redis ACL permissions to apply to app user.")
     }
     environment{
-       PORT="3001"
+       PORT="6379"
        //this should be the same temp password in the redis.conf file "requirepass"
        REDIS_INIT_PASS="temppass"
        AGENT_IP="192.168.0.126"
